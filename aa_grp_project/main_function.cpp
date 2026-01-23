@@ -6,48 +6,60 @@
 #include <chrono>
 
 
+
+//StudentID: A unique identifier for the student(e.g., Roll Number, ID).
+//BookID : A unique identifier for the book(e.g., ISBN, library code).
+//IssueDate : The date the book was issued to the student.
+//DueDate : The date by which the book should be returned.
+//ReturnDate : The actual date the book was returned(nullable if not returned yet).
+//FineAmount : Any fine accrued if the book is returned late.
+//RenewalCount : The number of times the book has been renewed by the student.
+//ReservationStatus : Indicates if the book is reserved by the student for future borrowing.
+
+
 using namespace std;
 
 
-struct LibraryRecord
+struct LibraryRecord //defines a structure named LibraryRecord. A structure is like a blueprint for creating custom data types.
 {
     string StudentID, BookID, IssueDate, DueDate, ReturnDate, ReservationStatus;
     double FineAmount;
     int RenewalCount;
 
 };
-string randomData[100];
-LibraryRecord record[10000];
-LibraryRecord ori_record[10000];
+string randomData[100];      //store randomData for 100
+LibraryRecord record[10000]; //store record for 10000
+LibraryRecord ori_record[10000]; //store ori_record for 10000
 
 // Function declarations
 void ReadRandomData();
-void DisplayData(LibraryRecord record[10000]);
+void DisplayData(LibraryRecord record[10000]); // record array for 10000
 void ReadLibraryRecord();
 
-//Sorting relavent function
-void ExecuteSorting(int option);
-void BubbleSort(int n);
-void Merge(int left, int mid, int right);
-void MergeSort(int left, int right);
-void SortingControl();
-void UnsortData();
-void Swap(LibraryRecord& x, LibraryRecord& y);
+
+//Sorting relevent function
+void ExecuteSorting(int option); //paremeter option integer representing the chosen sorting algorithm
+void SelectionSort(int n); // parameter n The number of elements to be sorted.
+void Merge(int left, int mid, int right); //parameter left starting index of the left subarray,parameter mid middle index of the array,parameter right The ending index of the right subarray.
+void MergeSort(int left, int right); //parameter left starting index of the left subarray , parameter right The ending index of the right subarray.
+void SortingControl(); // Controls the sorting process by displaying options
+void UnsortData(); // Unsorts the data for testing 
+void Swap(LibraryRecord& x, LibraryRecord& y); //parameter x: The first LibraryRecord object, parameter y: The second LibraryRecord object
 
 
 //Searching relevant functions
 void ExecuteSearching(int option);
-void BubbleSortForBinarySearch(string randomData[], int n);
-void BubbleSortForBook(int n);
-void SearchingControl();
-int LinearSearch(string k);
-int ImprovedLinearSearch(string k);
-int BinarySearch(string target);
-int loopCount;
+void SelectionSortForBinarySearch(string randomData[], int n);  // parameter randomData for the array of strings to be sorted , parameter n for the number of elements in the array.
+void SelectionSortForBook(int n); //parameter n of The number of elements to be sorted.
+void SearchingControl(); // Controls the searching process by displaying options 
+int LinearSearch(string k); // Performs Linear Search on the array to find the index of the given key , parameter k for the key to be searched for. return: The index of the key if found, -1 otherwise
+int ImprovedLinearSearch(string k); // Performs Improved Linear Search (e.g., using a sentinel value) to find the index of the given key.
+int BinarySearch(string target); // Performs Binary Search on the sorted array to find the index of the given target.
+int loopCount; //  to track the number of loop iterations during searching.
 
 //Analysis
 void  AnalysisControl();
-void DisplayTop5HighestFine();
+void AnalyseAllFines();
 void MergeSortDescending1(int left, int right);
 void MergeSortDescending2(int left, int mid, int right);
 void summarizeReservationStatus();
@@ -55,13 +67,12 @@ void summarizeRenewalCount();
 
 
 
-
 int main()
 {
+    system("color B0");
     system("cls");
     ReadRandomData();
     ReadLibraryRecord();
-
 
     int option;
 
@@ -74,15 +85,24 @@ int main()
         cout << string(9, '\t') << "         MAIN MENU OF LIBRARY      " << endl;
         cout << string(9, '\t') << "***********************************" << endl;
         cout << string(9, '\t') << "[1] Display First 100 Data" << endl;
-        cout << string(9, '\t') << "[2] Sorting" << endl;
-        cout << string(9, '\t') << "[3] Searching" << endl;
-        cout << string(9, '\t') << "[4] Analysis" << endl;
+        cout << string(9, '\t') << "[2] Sorting Menu" << endl;
+        cout << string(9, '\t') << "[3] Searching Menu" << endl;
+        cout << string(9, '\t') << "[4] Data Analysis " << endl;
         cout << string(9, '\t') << "[5] Exit" << endl;
         cout << "\n\n" << string(9, '\t') << "Please enter your choice (Number 1 - 5 only): ";
+
         cin >> option;
         cin.clear();
         cin.ignore(10, '\n');
         system("cls");
+
+        // Validate input
+        if (cin.fail() || option < 1 || option > 5)
+        {
+            cin.clear(); // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid in
+            continue; // Redisplay the menu
+        }
         cout << string(10, '\n');
 
         switch (option)
@@ -107,14 +127,17 @@ int main()
             break;
 
         case 5:
-            cout << string(9, '\t') << "system closed" << endl;
-            return 0;
-            break;
+            // Before exiting, ensure all resources are cleaned up
+            cout << string(9, '\t') << "Click again to exit the system" << endl;
+            cin.get();     // Wait for user to press Enter before exiting
+            exit(0);       // Exit the program cleanly
 
         default:
-            cout << string(9, '\t') << "Please enter the valid choice" << endl;
+            cout << string(9, '\t') << "Please enter a valid choice." << endl;
         }
     }
+
+    return 0; // Return from main function, though exit(0) should have already terminated
 }
 
 void ReadRandomData()
@@ -128,7 +151,7 @@ void ReadRandomData()
     getline(fin, s);
 
     // Read up to 100 lines of actual data 
-    for (int i = 0; i < 9999 && getline(fin, s); i++)
+    for (int i = 0; i < 100 && getline(fin, s); i++)
     {
         randomData[i] = s; // Store the string directly into the array
     }
@@ -136,41 +159,48 @@ void ReadRandomData()
     fin.close(); // Close the file
 
 }
+
 void DisplayData(LibraryRecord record[10000])
 {
+    // Print header for the table
     cout << string(5, '\t') << "=========================================================================================================" << endl;
     cout << string(5, '\t') << "|                                              Library Record Data                                      |" << endl;
     cout << string(5, '\t') << "=========================================================================================================" << endl;
+
+    // Print column headers with formatted spacing
     cout << string(5, '\t');
-    cout << "|" << left << setw(10) << "StudentID";
-    cout << "|" << left << setw(10) << "IssueDate";
-    cout << "|" << left << setw(10) << "DueDate";
-    cout << "|" << left << setw(10) << "ReturnDate";
-    cout << "|" << left << setw(10) << "FineAmount";
-    cout << "|" << left << setw(15) << "Renewal Count";
-    cout << "|" << left << setw(20) << "Reservation Status";
-    cout << "|" << left << setw(11) << "BookID" << "|" << endl;
+    cout << "|" << left << setw(10) << "StudentID";          // Column for Student ID
+    cout << "|" << left << setw(10) << "IssueDate";          // Column for Issue Date
+    cout << "|" << left << setw(10) << "DueDate";            // Column for Due Date
+    cout << "|" << left << setw(10) << "ReturnDate";         // Column for Return Date
+    cout << "|" << left << setw(10) << "FineAmount";         // Column for Fine Amount
+    cout << "|" << left << setw(15) << "Renewal Count";      // Column for Renewal Count
+    cout << "|" << left << setw(20) << "Reservation Status"; // Column for Reservation Status
+    cout << "|" << left << setw(11) << "BookID" << "|" << endl; // Column for Book ID
     cout << string(5, '\t') << "=========================================================================================================" << endl;
 
-    for (int i = 0; i < 100; i++) // Loop through the first 100 data
+    // Loop through the first 100 records
+    for (int i = 0; i < 100; i++) // Iterates only over the first 100 records in the array
     {
-        // Check if the record contains valid data
-        if (!record[i].StudentID.empty()) // Assuming StudentID is a string
+        // Check if the current record contains valid data
+        if (!record[i].StudentID.empty()) // Assuming StudentID is a string and checking if it's not empty
         {
+            // Print the record's data in a formatted table row
             cout << string(5, '\t');
-            cout << "|" << left << setw(10) << record[i].StudentID;
-            cout << "|" << left << setw(10) << record[i].IssueDate;
-            cout << "|" << left << setw(10) << record[i].DueDate;
-            cout << "|" << left << setw(10) << record[i].ReturnDate;
-            cout << "|" << left << setw(10) << record[i].FineAmount;
-            cout << "|" << left << setw(15) << record[i].RenewalCount;
-            cout << "|" << left << setw(20) << record[i].ReservationStatus;
-            cout << "|" << left << setw(11) << record[i].BookID << "|" << endl;
+            cout << "|" << left << setw(10) << record[i].StudentID;          // Print Student ID
+            cout << "|" << left << setw(10) << record[i].IssueDate;          // Print Issue Date
+            cout << "|" << left << setw(10) << record[i].DueDate;            // Print Due Date
+            cout << "|" << left << setw(10) << record[i].ReturnDate;         // Print Return Date
+            cout << "|" << left << setw(10) << record[i].FineAmount;         // Print Fine Amount
+            cout << "|" << left << setw(15) << record[i].RenewalCount;       // Print Renewal Count
+            cout << "|" << left << setw(20) << record[i].ReservationStatus;  // Print Reservation Status
+            cout << "|" << left << setw(11) << record[i].BookID << "|" << endl; // Print Book ID
         }
     }
+
+    // Print footer of the table
     cout << string(5, '\t') << "=========================================================================================================" << endl;
 }
-
 
 
 void ReadLibraryRecord()
@@ -247,8 +277,6 @@ void ReadLibraryRecord()
     fin.close();
 }
 
-
-
 void Swap(LibraryRecord& x, LibraryRecord& y)
 {
     LibraryRecord  temp = x;
@@ -260,33 +288,40 @@ void Swap(LibraryRecord& x, LibraryRecord& y)
 void SortingControl()
 {
     system("cls");
-    cout << string(10, '\n');
-
     int option;
-    cout << string(9, '\t') << "****************" << endl;
-    cout << string(9, '\t') << "  SORTING MENU  " << endl;
-    cout << string(9, '\t') << "****************" << endl;
-    cout << string(9, '\t') << "[1] Bubble Sort" << endl;
-    cout << string(9, '\t') << "[2] Merge Sort" << endl;
-    cout << string(9, '\t') << "[3] Unsort" << endl;
-    cout << string(9, '\t') << "[4] Back" << endl;
-
-    cout << "\n\n" << string(9, '\t') << "Please enter your choice (Number 1 - 3 only): ";
 
     while (true)
     {
+        // Print the menu
+        cout << string(10, '\n');
+        cout << string(9, '\t') << "****************" << endl;
+        cout << string(9, '\t') << "  SORTING MENU  " << endl;
+        cout << string(9, '\t') << "****************" << endl;
+        cout << string(9, '\t') << "[1] Selection Sort" << endl;
+        cout << string(9, '\t') << "[2] Merge Sort" << endl;
+        cout << string(9, '\t') << "[3] Unsort" << endl;
+        cout << string(9, '\t') << "[4] Back" << endl;
+        cout << "\n\n" << string(9, '\t') << "Please enter your choice (Number 1 - 4 only): ";
 
         cin >> option;
         cin.clear();
         cin.ignore(10, '\n');
         system("cls");
-        cout << string(10, '\n');
+
+        // Validate input
+        if (cin.fail() || option < 1 || option > 4)
+        {
+            cin.clear(); // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+            system("cls"); // Clear screen before redisplaying the menu
+            continue; // Redisplay the menu
+        }
 
         switch (option)
         {
         case 1:
         case 2:
-            ExecuteSorting(option);
+            ExecuteSorting(option); // Perform the sorting operation
             break;
 
         case 3:
@@ -295,59 +330,54 @@ void SortingControl()
 
         case 4:
             system("cls");
-            main();
+            main(); // Return to the main menu
+            return; // Exit SortingControl to prevent infinite loop
 
         default:
-            cout << string(9, '\t') << "Please enter the valid choice" << endl;
+            // No need for a default here since all cases are covered
+            break;
         }
     }
 }
 
+
 void ExecuteSorting(int option)
 {
     copy_n(ori_record, 10000, record);
-    // Initialize a variable 'loopCount' to keep track of the number of loops
     loopCount = 0;
 
-    // Create a variable 'elapsed_seconds' to store the time duration of the sorting process.
-    chrono::duration<double> elapsed_seconds;
+    // Variables for timing
+    long long start_time_ms = 0;
+    long long end_time_ms = 0;
+    long long elapsed_time_ms = 0;
 
-    // Print a message to let the user know that the program is processing and the user should wait.
+    cout << string(10, '\n');
     cout << string(9, '\t') << "Please wait for a while..." << endl;
 
-    // Check if the user has chosen the option to perform BubbleSort (assuming 'option' is provided earlier in the code).
-    if (option == 1)
+    if (option == 1) // SelectionSort
     {
-        // Record the start time of the BubbleSort operation using the system clock.
         auto start = chrono::system_clock::now();
+        start_time_ms = chrono::duration_cast<chrono::milliseconds>(start.time_since_epoch()).count();
 
-        // Call the BubbleSort function with an array of size 10,000 (assuming BubbleSort takes care of sorting the array).
-        BubbleSort(10000);
+        SelectionSort(10000);
 
-        // Record the end time after the sorting operation completes.
         auto end = chrono::system_clock::now();
+        end_time_ms = chrono::duration_cast<chrono::milliseconds>(end.time_since_epoch()).count();
 
-        // Calculate the elapsed time between the start and end using the difference between the two times.
-        elapsed_seconds = end - start;
-
-
+        elapsed_time_ms = chrono::duration_cast<chrono::milliseconds>(end - start).count();
     }
-    else  // If the user didn't choose option 1, assume they want to run MergeSort instead.
+    else // MergeSort
     {
-        // Record the start time of the MergeSort operation using the system clock.
         auto start = chrono::system_clock::now();
+        start_time_ms = chrono::duration_cast<chrono::milliseconds>(start.time_since_epoch()).count();
 
-        // Call the MergeSort function with the array indices to sort (from index 0 to index 9999).
         MergeSort(0, 9999);
 
-        // Record the end time after the sorting operation completes.
         auto end = chrono::system_clock::now();
+        end_time_ms = chrono::duration_cast<chrono::milliseconds>(end.time_since_epoch()).count();
 
-        // Calculate the elapsed time between the start and end using the difference between the two times.
-        elapsed_seconds = end - start;
-
+        elapsed_time_ms = chrono::duration_cast<chrono::milliseconds>(end - start).count();
     }
-
 
     system("cls");
     cout << string(10, '\n');
@@ -361,49 +391,67 @@ void ExecuteSorting(int option)
         throw;
     }
 
-    cout << "\n\n" << string(9, '\t') << "Total numbers of swaps: " << loopCount << endl;
-    cout << string(9, '\t') << "The duration time is " << elapsed_seconds.count() << " second" << endl;
-    cout << "\n\n" << string(9, '\t') << "Please press 'Enter' to continue...";
+    cout << "\n\n" << string(9, '\t') << "Start Time: " << start_time_ms << " milliseconds" << endl;
+    cout << string(9, '\t') << "End Time: " << end_time_ms << " milliseconds" << endl;
+    cout << string(9, '\t') << "Total numbers of swaps: " << loopCount << endl;
+    cout << string(9, '\t') << "The duration time is " << elapsed_time_ms << " milliseconds" << endl;
 
-    system("pause");
+    cout << "\n\n" << string(9, '\t') << "Please press 'Enter' to continue...";
+    cin.ignore();
+    system("cls");
     SortingControl();
 }
-// Swap function definition
-template <typename T>
-void Swap(T& a, T& b)
-{
-    T temp = a;
-    a = b;
-    b = temp;
-}
 
-void BubbleSort(int n)
+//// Swap function definition
+//template <typename T>
+//void Swap(T& a, T& b)
+//{
+//    T temp = a;
+//    a = b;
+//    b = temp;
+//}
+
+void SelectionSort(int n)
 {
     for (int i = 0; i < n - 1; i++)
     {
-        for (int k = 0; k < n - i - 1; k++)
+        // Find the index of the smallest element in the unsorted portion
+        int minIndex = i;
+        for (int k = i + 1; k < n; k++)
         {
-            if (record[k].StudentID > record[k + 1].StudentID)
+            if (record[k].StudentID < record[minIndex].StudentID)
             {
-                Swap(record[k], record[k + 1]);
+                minIndex = k;
             }
         }
-    }
-}
-void BubbleSortForBook(int n)
-{
-    for (int i = 0; i < n - 1; i++)
-    {
-        for (int k = 0; k < n - i - 1; k++)
+        // Swap the smallest element with the first element of the unsorted portion
+        if (minIndex != i)
         {
-            if (record[k].BookID > record[k + 1].BookID)
-            {
-                swap(record[k], record[k + 1]);
-            }
+            Swap(record[i], record[minIndex]);
         }
     }
 }
 
+void SelectionSortForBook(int n)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        // Find the index of the smallest BookID in the unsorted portion
+        int minIndex = i;
+        for (int k = i + 1; k < n; k++)
+        {
+            if (record[k].BookID < record[minIndex].BookID)
+            {
+                minIndex = k;
+            }
+        }
+        // Swap the smallest element with the first element of the unsorted portion
+        if (minIndex != i)
+        {
+            swap(record[i], record[minIndex]);
+        }
+    }
+}
 
 void MergeSort(int left, int right)
 {
@@ -418,22 +466,26 @@ void MergeSort(int left, int right)
     }
 }
 
-void BubbleSortForBinarySearch(string randomData[], int n)
+void SelectionSortForBinarySearch(string randomData[], int n)
 {
     for (int i = 0; i < n - 1; i++)
     {
-        for (int k = 0; k < n - i - 1; k++)
+        // Find the index of the smallest string in the unsorted portion
+        int minIndex = i;
+        for (int k = i + 1; k < n; k++)
         {
-            if (randomData[k] > randomData[k + 1]) // Compare strings lexicographically
+            if (randomData[k] < randomData[minIndex]) // Compare strings lexicographically
             {
-                swap(randomData[k], randomData[k + 1]); // Use built-in swap for strings
+                minIndex = k;
             }
+        }
+        // Swap the smallest string with the first string of the unsorted portion
+        if (minIndex != i)
+        {
+            swap(randomData[i], randomData[minIndex]); // Use built-in swap for strings
         }
     }
 }
-
-
-
 
 void Merge(int left, int mid, int right)
 {
@@ -486,8 +538,6 @@ void Merge(int left, int mid, int right)
     delete[] rightArray;
 }
 
-
-
 void UnsortData() // Function to reset the `record` array back to its original unsorted state
 {
     // Copy the first 10000 elements from the 'ori_record' array to the 'record' array
@@ -499,18 +549,22 @@ void UnsortData() // Function to reset the `record` array back to its original u
     cout << "\n\n" << string(9, '\t') << "Data Unsorted. Please press 'Enter' to continue..." << endl;
     cout << "\n\n" << string(9, '\t');
 
-    system("pause");
+
+    cin.get();    // Wait for Enter key
+
     SortingControl();
 }
+
 
 void SearchingControl()
 {
     int option;
 
+
     while (true)
     {
         cout << string(9, '\t') << "***********************************" << endl;
-        cout << string(9, '\t') << "          LIBRARY DATA SYSTEM      " << endl;
+        cout << string(9, '\t') << "          SEARCHING MENU           " << endl;
         cout << string(9, '\t') << "***********************************" << endl;
         cout << string(9, '\t') << "[1] Linear Search 100 Random Data" << endl;
         cout << string(9, '\t') << "[2] Binary Search 100 Random Data" << endl;
@@ -538,101 +592,138 @@ void SearchingControl()
 
 
         default:
-            cout << string(9, '\t') << "Please enter the valid choice" << endl;
+            cout << string(9, '\t') << endl;
         }
     }
 }
-
-
-
 void ExecuteSearching(int option)
 {
     int index;
-    string info[100][2];
-    chrono::duration<double> elapsed_seconds;
-    // Print a message to let the user know that the program is processing and the user should wait.
+    string info[100][2]; // Array to store book info: [BookID, Found Status/Index]
+    chrono::duration<double> elapsed_seconds; // Duration to measure time taken for search
+    // Declare start and end variables for high-resolution clock
+    auto start = chrono::high_resolution_clock::now();
+    auto end = chrono::high_resolution_clock::now();
+
+    // Counters for how many items were found and not found
+    int totalFound = 0;
+    int totalNotFound = 0;
+
+    // Print message to indicate processing, letting the user know to wait
     cout << string(9, '\t') << "Please wait for a while..." << endl;
-    if (option == 1)
+
+    // Perform search based on the selected option (1: Linear Search, 2: Binary Search, else: Improved Linear Search)
+    if (option == 1)  // Linear Search
     {
-        auto start = chrono::system_clock::now();
+        system("cls");
+        start = chrono::high_resolution_clock::now();  // Record the start time
 
-
+        // Loop through 100 random data entries for searching
         for (int i = 0; i < 100; i++)
         {
-            index = LinearSearch(randomData[i]);
-            info[i][0] = randomData[i];
-            info[i][1] = (index == -1) ? "Not Found" : to_string(index); // Convert index to string
+            index = LinearSearch(randomData[i]);  // Perform linear search
+            info[i][0] = randomData[i];  // Store book ID
+            info[i][1] = (index == -1) ? "Not Found" : to_string(index); // Store result (Not Found or Index)
+
+            // Update counters based on search result
+            if (index == -1) totalNotFound++;
+            else totalFound++;
         }
 
-        auto end = chrono::system_clock::now();
-        elapsed_seconds = end - start;
+        end = chrono::high_resolution_clock::now();  // Record the end time
+        elapsed_seconds = end - start;  // Calculate elapsed time for searching
     }
-    else if (option == 2)
+    else if (option == 2)  // Binary Search
     {
-        BubbleSortForBinarySearch(randomData, 100);
-        BubbleSortForBook(10000);
-        auto start = chrono::system_clock::now();
+        SelectionSortForBinarySearch(randomData, 100);  // Sort the data first for binary search
+        SelectionSortForBook(10000);  // Sort additional book data
 
+        start = chrono::high_resolution_clock::now();  // Record the start time
+
+        // Loop through 100 random data entries for binary search
         for (int i = 0; i < 100; i++)
         {
+            index = BinarySearch(randomData[i]);  // Perform binary search
+            info[i][0] = randomData[i];  // Store book ID
+            info[i][1] = (index == -1) ? "Not Found" : to_string(index); // Store result (Not Found or Index)
 
-
-
-            index = BinarySearch(randomData[i]);
-            info[i][0] = randomData[i];
-            info[i][1] = (index == -1) ? "Not Found" : to_string(index);
-
+            // Update counters based on search result
+            if (index == -1) totalNotFound++;
+            else totalFound++;
         }
 
-        auto end = chrono::system_clock::now();
-        elapsed_seconds = end - start;
+        end = chrono::high_resolution_clock::now();  // Record the end time
+        elapsed_seconds = end - start;  // Calculate elapsed time for searching
     }
-    else
+    else  // Improved Linear Search (Default case)
     {
-        auto start = chrono::system_clock::now();
+        start = chrono::high_resolution_clock::now();  // Record the start time
 
+        // Loop through 100 random data entries for improved linear search
         for (int i = 0; i < 100; i++)
         {
+            index = ImprovedLinearSearch(randomData[i]);  // Perform improved linear search
+            info[i][0] = randomData[i];  // Store book ID
+            info[i][1] = (index == -1) ? "Not Found" : to_string(index); // Store result (Not Found or Index)
 
-            index = ImprovedLinearSearch(randomData[i]);
-            info[i][0] = randomData[i];
-            info[i][1] = (index == -1) ? "Not Found" : to_string(index);
-
+            // Update counters based on search result
+            if (index == -1) totalNotFound++;
+            else totalFound++;
         }
 
-        auto end = chrono::system_clock::now();
-        elapsed_seconds = end - start;
+        end = chrono::high_resolution_clock::now();  // Record the end time
+        elapsed_seconds = end - start;  // Calculate elapsed time for searching
     }
-    system("cls");
+
+    system("cls");  // Clear the console for the search results
+
+    // Print the header for the table showing search results
     cout << string(9, '\t') << "=====================================" << endl;
     cout << string(9, '\t') << "|         BOOK   DATA               |" << endl;
     cout << string(9, '\t') << "=====================================" << endl;
     cout << string(9, '\t');
     printf("|%10s|%18s|%5s|", "BookID", "Is Found/Not Found", "Index");
     cout << "\n" << string(9, '\t') << "====================================" << endl;
+
+    // Loop through the results and display them in a table format
     for (int i = 0; i < 100; i++)
     {
         cout << string(9, '\t');
-        cout << "|" << left << setw(10) << info[i][0];
-        if (info[i][1] == "Not Found") // Compare with "Not Found"
+        cout << "|" << left << setw(10) << info[i][0];  // Display the BookID
+        if (info[i][1] == "Not Found")  // If the book was not found
         {
-            cout << "|" << left << setw(18) << "Not Found";
-            cout << "|" << left << setw(5) << "  -  " << "|";
+            cout << "|" << left << setw(18) << "Not Found";  // Display "Not Found"
+            cout << "|" << left << setw(5) << "  -  " << "|";  // Display placeholder for index
         }
-        else
+        else  // If the book was found
         {
-            cout << "|" << left << setw(18) << "Is Found";
-            cout << "|" << left << setw(5) << info[i][1] << "|";
+            cout << "|" << left << setw(18) << "Is Found";  // Display "Is Found"
+            cout << "|" << left << setw(5) << info[i][1] << "|";  // Display the index of the found book
         }
         cout << endl;
     }
+
     cout << string(9, '\t') << "=====================================" << endl;
 
-    cout << "\n" << string(9, '\t') << "The duration searching time is " << elapsed_seconds.count() * 1000000 << " microseconds" << endl;
+    // Print the summary of found and not found items
+    cout << string(9, '\t') << "Total Found: " << totalFound << endl;
+    cout << string(9, '\t') << "Total Not Found: " << totalNotFound << endl;
+
+    // Output the total search duration in milliseconds
+    cout << "\n" << string(9, '\t') << "The duration searching time is "
+        << chrono::duration_cast<chrono::milliseconds>(elapsed_seconds).count() << " milliseconds" << endl;
+
+    // Calculate and output the start and end times in milliseconds
+    auto start_time_ms = chrono::duration_cast<chrono::milliseconds>(start.time_since_epoch()).count();
+    auto end_time_ms = chrono::duration_cast<chrono::milliseconds>(end.time_since_epoch()).count();
+    cout << string(9, '\t') << "Start time: " << start_time_ms << " milliseconds" << endl;
+    cout << string(9, '\t') << "End time: " << end_time_ms << " milliseconds" << endl;
+
     cout << "\n\n" << string(9, '\t') << "Please press 'Enter' to continue...";
-    cin.ignore();
-    system("cls");
-    cout << string(10, '\n');
+    cin.ignore();  // Wait for the user to press Enter before proceeding
+
+    system("cls");  // Clear the screen again
+    cout << string(10, '\n');  // Add some space before returning control
 }
 
 int BinarySearch(string target)
@@ -662,7 +753,6 @@ int BinarySearch(string target)
     //target not found
     return -1;
 }
-
 
 // Function to perform linear search
 int LinearSearch(string k)
@@ -773,93 +863,114 @@ void MergeSortDescending1(int left, int right)
     }
 }
 
-
 void AnalysisControl()
 {
-    system("cls");
     int option;
-    cout << string(9, '\t') << "===================================" << endl;
-    cout << string(9, '\t') << "|          ANALYSIS MENU          |" << endl;
-    cout << string(9, '\t') << "===================================" << endl;
-    cout << string(9, '\t') << "[1] Display Top 5 Highest Fine" << endl;
-    cout << string(9, '\t') << "[2] Display the summary of count of reservation" << endl;
-    cout << string(9, '\t') << "[3] Display  the summary of count of renewal" << endl;
-    cout << string(9, '\t') << "[4] Back" << endl;
-
-    cout << "\n\n" << string(9, '\t') << "Please enter your choice (Number 1 - 4 only): ";
-
     while (true)
     {
+        system("cls");
+
+        cout << string(10, '\n');
+
+        // Display menu
+        cout << string(9, '\t') << "===================================" << endl;
+        cout << string(9, '\t') << "|          ANALYSIS MENU          |" << endl;
+        cout << string(9, '\t') << "===================================" << endl;
+        cout << string(9, '\t') << "[1] Analyse the students with fines" << endl;
+        cout << string(9, '\t') << "[2] Display the summary of count of reservation" << endl;
+        cout << string(9, '\t') << "[3] Display  the summary of count of renewal" << endl;
+        cout << string(9, '\t') << "[4] Back" << endl;
+        cout << "\n\n" << string(9, '\t') << "Please enter your choice (Number 1 - 4 only): ";
+
+        // Take integer input
         cin >> option;
         cin.clear();
         cin.ignore(10, '\n');
         system("cls");
+
+        // Validate input
+        if (cin.fail() || option < 1 || option > 4)
+        {
+            cin.clear(); // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+            continue; // Go back to the start of the loop and redisplay the menu
+        }
+
+        system("cls");
         cout << string(10, '\n');
 
+        // Process valid input
         switch (option)
         {
         case 1:
-            DisplayTop5HighestFine();
+            AnalyseAllFines();
             break;
-
         case 2:
             summarizeReservationStatus();
             break;
         case 3:
             summarizeRenewalCount();
             break;
-
-
         case 4:
-            system("cls");
-            main();
-
+            main(); // Exit to main menu
+            return; // Exit the function
         default:
-            cout << string(9, '\t') << "Please enter the valid choice" << endl;
+            continue; // This will go back to the start of the while loop
         }
     }
 }
 
-// Function to display top 5 highest fines and include calculations
-void DisplayTop5HighestFine()
+
+
+void AnalyseAllFines()
 {
+    // Sort records by fine amount in descending order 
+    MergeSortDescending1(0, 9999); // Assumes a merge sort function exists to sort fines in descending order
 
-    // Sort records by fine amount in descending order
-    MergeSortDescending1(0, 9999);
+    // Check if there are any records with fines 
+    bool hasRecordsWithFines = false; // Flag to indicate if any records have fines
+    int totalRecordsWithFines = 0;    // Counter for total records with fines
 
-    // Check if there are any records with fines
-    bool hasRecordsWithFines = false;
-    for (int i = 0; i < 9999; i++)
+    // First pass to count total records with fines
+    for (int i = 0; i < 9999; i++) // Loop through all records
     {
-        if (record[i].FineAmount > 0)
+        if (record[i].FineAmount > 0) // Check if a record has a fine greater than 0
         {
-            hasRecordsWithFines = true;
-            break;
+            hasRecordsWithFines = true; // Set the flag if a record with fines is found
+            totalRecordsWithFines++;   // Increment the counter
         }
     }
 
-    if (!hasRecordsWithFines)
+    if (!hasRecordsWithFines) // If no records with fines were found
     {
+        // Display message and return to the previous menu
         cout << string(9, '\t') << "No records with fines found." << endl;
         cout << "\nPress Enter to continue...";
-        cin.ignore();
-        return;
+        cin.ignore(); // Wait for user input
+        return;       // Exit the function
     }
 
-    system("cls");
+    system("cls"); // Clear the console screen
+
+    // Display header for records with fines
     cout << string(9, '\t') << "========================================================" << endl;
-    cout << string(9, '\t') << "|         TOP 5 STUDENTS WITH HIGHEST FINES            |" << endl;
+    cout << string(9, '\t') << "|              STUDENTS WITH FINES                     |" << endl;
+    cout << string(9, '\t') << "|              Total Records: " << setw(3) << totalRecordsWithFines << "                     |" << endl;
     cout << string(9, '\t') << "========================================================" << endl;
+
+    // Display column headers for the table
     cout << string(9, '\t');
     printf("|%10s|%10s|%10s|%10s|%10s|", "StudentID", "BookID", "Fine", "Due Date", "Return Date");
     cout << "\n" << string(9, '\t') << "========================================================" << endl;
 
-    int count = 0;  // Counter for displayed records
-    double totalFine = 0;  // Variable to store total fine amount
-    for (int i = 0; i < 9999 && count < 5; i++)
+    double totalFine = 0; // Variable to store the total fine amount
+
+    // Display all records with fines
+    for (int i = 0; i < 9999; i++) // Loop through all records
     {
-        if (record[i].FineAmount > 0)
+        if (record[i].FineAmount > 0) // If the record has a fine
         {
+            // Display the record details
             cout << string(9, '\t');
             cout << "|" << left << setw(10) << record[i].StudentID
                 << "|" << left << setw(10) << record[i].BookID
@@ -870,181 +981,164 @@ void DisplayTop5HighestFine()
 
             // Add the fine amount to the total fine
             totalFine += record[i].FineAmount;
-            count++;
         }
     }
 
-    // Calculate average fine
-    double averageFine = (count > 0) ? (totalFine / count) : 0;
+    // Calculate the average fine amount based on total records with fines
+    double averageFine = (totalRecordsWithFines > 0) ? (totalFine / totalRecordsWithFines) : 0;
 
-    // Display total and average fines
+    // Display total and average fine statistics
     cout << string(9, '\t') << "========================================================" << endl;
-    cout << string(9, '\t') << "| Total Fine: " << setw(41) << totalFine << "|" << endl;
-    cout << string(9, '\t') << "| Average Fine: " << setw(39) << averageFine << "|" << endl;
+    cout << string(9, '\t') << "| Total Records with Fines: " << setw(31) << totalRecordsWithFines << "|" << endl;
+    cout << string(9, '\t') << "| Total Fine Amount: " << setw(35) << fixed << setprecision(2) << totalFine << "|" << endl;
+    cout << string(9, '\t') << "| Average Fine Amount: " << setw(33) << fixed << setprecision(2) << averageFine << "|" << endl;
     cout << string(9, '\t') << "========================================================" << endl;
 
     cout << "\n" << string(9, '\t');
 
-    system("pause");
-    AnalysisControl();
-    cout << string(10, '\n');
+    system("pause"); // Pause to allow the user to view the output
+    AnalysisControl(); // Call a function to return control to the analysis menu
+    cout << string(10, '\n'); // Add spacing before returning to the previous menu
 }
-void DisplayReservationCount()
-{
-    // Track students who have been processed
-    bool processed[9999] = { false };
-
-    system("cls");
-    cout << string(9, '\t') << "========================================================" << endl;
-    cout << string(9, '\t') << "|              STUDENT RESERVATION COUNTS              |" << endl;
-    cout << string(9, '\t') << "========================================================" << endl;
-    cout << string(9, '\t');
-    printf("|%10s|%10s|%10s|\n", "StudentID", "Reservations", "Total");
-    cout << string(9, '\t') << "========================================================" << endl;
-
-    for (int i = 0; i < 9999; i++) {
-        // If this student has not been processed yet
-        if (!processed[i] && record[i].StudentID != "") {
-            int reservationCount = 0;
-
-            // Count the reservations for this student
-            for (int j = 0; j < 9999; j++) {
-                if (record[j].StudentID == record[i].StudentID && record[j].ReservationStatus == "Reserved") {
-                    reservationCount++;
-                }
-            }
-
-            // Display the reservation count for this student
-            cout << string(9, '\t');
-            cout << "|" << left << setw(10) << record[i].StudentID
-                << "|" << left << setw(10) << reservationCount
-                << "|" << left << setw(10) << reservationCount << "|";
-            cout << endl;
-
-            // Mark this student as processed
-            processed[i] = true;
-        }
-    }
-
-    cout << string(9, '\t') << "========================================================" << endl;
-    cout << "\n" << string(9, '\t') << "Press 'Enter' to continue...";
-
-    system("pause");
-    AnalysisControl();
-}
-
-
 void summarizeReservationStatus()
 {
-    // Initialize counters for each status
-    int reservedCount = 0;
-    int availableCount = 0;
-    int notReservedCount = 0;
-    int waitingCount = 0;
+    // Initialize counters for each reservation status
+    int reservedCount = 0;      // Count of records with status "Reserved"
+    int availableCount = 0;     // Count of records with status "Available"
+    int notReservedCount = 0;   // Count of records with status "Not Reserved"
+    int waitingCount = 0;       // Count of records with status "Waiting"
 
-    // Loop through each record to count the ReservationStatus
+    // Loop through each record to analyze reservation statuses
     for (int i = 0; i < 10000; i++) {
-        // Skip records with empty StudentID or BookID (to avoid processing invalid entries)
+        // Skip invalid records (those with empty StudentID or BookID)
         if (record[i].StudentID.empty() || record[i].BookID.empty()) {
-            continue;
+            continue; // Move to the next record if the current one is invalid
         }
 
-        // Check the ReservationStatus and update the counters
+        // Check the ReservationStatus field and update the corresponding counter
         if (record[i].ReservationStatus == "Reserved") {
-            reservedCount++;
+            reservedCount++; // Increment count for "Reserved" status
         }
         else if (record[i].ReservationStatus == "Available") {
-            availableCount++;
+            availableCount++; // Increment count for "Available" status
         }
         else if (record[i].ReservationStatus == "Not Reserved") {
-            notReservedCount++;
+            notReservedCount++; // Increment count for "Not Reserved" status
         }
         else if (record[i].ReservationStatus == "Waiting") {
-            waitingCount++;
+            waitingCount++; // Increment count for "Waiting" status
         }
     }
 
-    // Output the results in a table format
+    // Clear the console screen before displaying the summary
     system("cls");
+
+    // Print header for the reservation status summary table
     cout << string(9, '\t') << "=================================" << endl;
     cout << string(9, '\t') << "|   Reservation Status Summary  |" << endl;
     cout << string(9, '\t') << "=================================" << endl;
+
+    // Print column headers for the table
     cout << string(9, '\t');
     printf("|%20s|%10s|\n", "Reservation Status", "Count");
     cout << string(9, '\t') << "=================================" << endl;
 
-    // Print the status counts in a tabular form
+    // Print the count for "Reserved" status
     cout << string(9, '\t');
     printf("|%20s|%10d|\n", "Reserved", reservedCount);
+
+    // Print the count for "Available" status
     cout << string(9, '\t');
     printf("|%20s|%10d|\n", "Available", availableCount);
+
+    // Print the count for "Not Reserved" status
     cout << string(9, '\t');
     printf("|%20s|%10d|\n", "Not Reserved", notReservedCount);
+
+    // Print the count for "Waiting" status
     cout << string(9, '\t');
     printf("|%20s|%10d|\n", "Waiting", waitingCount);
 
+    // Print footer for the reservation status table
     cout << string(9, '\t') << "=================================" << endl;
-    cout << "\n" << string(9, '\t') << "Press 'Enter' to continue...";
 
+    // Add vertical spacing for cleaner output
     cout << string(10, '\n');
 
+    // Wait for the user to view the summary before proceeding
+    cout << "\n" << string(9, '\t');
     system("pause");
+
+    // Return control to the analysis menu
     AnalysisControl();
 
+    // Add spacing before returning to the main menu
+    cout << string(10, '\n');
 }
 
 void summarizeRenewalCount()
 {
-    // Initialize counters for each renewal count
-    int renewalCount0 = 0;
-    int renewalCount1 = 0;
-    int renewalCount2 = 0;
-    int renewalCount3 = 0;
+    // Initialize counters for each renewal count category (0 to 3 renewals)
+    int renewalCount0 = 0; // Counter for records with 0 renewals
+    int renewalCount1 = 0; // Counter for records with 1 renewal
+    int renewalCount2 = 0; // Counter for records with 2 renewals
+    int renewalCount3 = 0; // Counter for records with 3 renewals
 
-    // Loop through each record to count students based on RenewalCount
+    // Loop through all 10,000 records to analyze their RenewalCount
     for (int i = 0; i < 10000; i++) {
-        // Skip records with empty StudentID or BookID (to avoid processing invalid entries)
+        // Skip invalid records (those with empty StudentID or BookID)
         if (record[i].StudentID.empty() || record[i].BookID.empty()) {
-            continue;
+            continue; // Move to the next record
         }
 
-        // Check the RenewalCount and update the counters
+        // Increment the appropriate counter based on the RenewalCount value
         if (record[i].RenewalCount == 0) {
-            renewalCount0++;
+            renewalCount0++; // Add to 0-renewal count
         }
         else if (record[i].RenewalCount == 1) {
-            renewalCount1++;
+            renewalCount1++; // Add to 1-renewal count
         }
         else if (record[i].RenewalCount == 2) {
-            renewalCount2++;
+            renewalCount2++; // Add to 2-renewal count
         }
         else if (record[i].RenewalCount == 3) {
-            renewalCount3++;
+            renewalCount3++; // Add to 3-renewal count
         }
     }
 
-    // Output the results in a table format
+    // Clear the console to display the summary in a clean format
     system("cls");
+
+    // Print a header for the renewal count summary table
     cout << string(9, '\t') << "=================================" << endl;
     cout << string(9, '\t') << "|   Renewal Count Summary      |" << endl;
     cout << string(9, '\t') << "=================================" << endl;
+
+    // Print the column headers for the table
     cout << string(9, '\t');
-    printf("|%20s|%10s|\n", "Renewal Count", "Count");
+    printf("|%20s|%10s|\n", "Renewal Count", "Count"); // "Renewal Count" and "Count" columns
     cout << string(9, '\t') << "=================================" << endl;
 
-    // Print the renewal count summaries in a tabular form
+    // Print the counts for each renewal category in the table
     cout << string(9, '\t');
-    printf("|%20d|%10d|\n", 0, renewalCount0);
+    printf("|%20d|%10d|\n", 0, renewalCount0); // Row for 0 renewals
     cout << string(9, '\t');
-    printf("|%20d|%10d|\n", 1, renewalCount1);
+    printf("|%20d|%10d|\n", 1, renewalCount1); // Row for 1 renewal
     cout << string(9, '\t');
-    printf("|%20d|%10d|\n", 2, renewalCount2);
+    printf("|%20d|%10d|\n", 2, renewalCount2); // Row for 2 renewals
     cout << string(9, '\t');
-    printf("|%20d|%10d|\n", 3, renewalCount3);
+    printf("|%20d|%10d|\n", 3, renewalCount3); // Row for 3 renewals
 
+    // Print a footer for the summary table
     cout << string(9, '\t') << "=================================" << endl;
-    cout << "\n" << string(9, '\t') << "Press 'Enter' to continue...";
+
+    // Add a pause to allow the user to review the output
+    cout << "\n" << string(9, '\t');
     system("pause");
+
+    // Call the AnalysisControl() function to proceed with further actions
     AnalysisControl();
 
+    // Add spacing after the function execution
+    cout << string(10, '\n');
 }

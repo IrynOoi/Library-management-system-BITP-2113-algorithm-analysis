@@ -1,0 +1,19 @@
+StudentID: A unique identifier for the student (e.g., Roll Number, ID).
+BookID: A unique identifier for the book (e.g., ISBN, library code).
+IssueDate: The date the book was issued to the student.
+DueDate: The date by which the book should be returned.
+ReturnDate: The actual date the book was returned (nullable if not returned yet).
+FineAmount: Any fine accrued if the book is returned late.
+RenewalCount: The number of times the book has been renewed by the student.
+ReservationStatus: Indicates if the book is reserved by the student for future borrowing.
+
+
+
+StudentID
+BookID
+IssueDate
+DueDate
+ReturnDate
+FineAmount
+RenewalCount
+ReservationStatus
