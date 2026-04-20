@@ -56,7 +56,8 @@ style="margin-bottom: 20px;" />
 
 ## When user enter [3], the system will revert the data to its original unsorted state. Then, it will display the 100 data and show that the data has unsorted.
 
-<img width="504" height="529" alt="image" src="https://github.com/user-attachments/assets/d167d29e-f070-4a25-8b7e-f48b6e511105" style="margin-bottom: 40px;"/>
+<img width="504" height="529" alt="image" src="https://github.com/user-attachments/assets/d167d29e-f070-4a25-8b7e-f48b6e511105"
+style="margin-bottom: 20px;" />
 
 <img width="517" height="38" alt="image" src="https://github.com/user-attachments/assets/aaea66b3-d361-40ab-aa17-215e924a3516" />
 
