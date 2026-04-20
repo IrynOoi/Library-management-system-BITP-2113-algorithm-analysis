@@ -48,7 +48,7 @@ When user enter [2], the system will perform an efficient sort using a divide-an
 •	Duration time
 •	Sorting method used
 
-<img width="495" height="539" alt="image" src="https://github.com/user-attachments/assets/56a7f692-98d5-4118-b3d2-35a4c1bb6dce" style="margin-bottom: 20px;" />
+<img width="495" height="539" alt="image" src="https://github.com/user-attachments/assets/56a7f692-98d5-4118-b3d2-35a4c1bb6dce"  style="margin-bottom: 20px;" />
 
 <img width="517" height="136" alt="image" src="https://github.com/user-attachments/assets/392b1c86-7a68-447c-b341-cb9a56bcc794" />
 
