@@ -1,6 +1,6 @@
-## OUTPUT
+# OUTPUT
 
- # MAIN MENU OF LIBRARY 
+## MAIN MENU OF LIBRARY 
 <img width="511" height="235" alt="image" src="https://github.com/user-attachments/assets/cb15dca8-b79a-4523-868e-f2830bfcae1a" />
 
 
