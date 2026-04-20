@@ -1,4 +1,4 @@
-<img width="420" height="280" alt="image" src="https://github.com/user-attachments/assets/a9e19ce4-a162-4aa8-b2cc-fff29f2d42f6" /># OUTPUT
+# OUTPUT
 
 ## MAIN MENU OF LIBRARY 
 <img width="511" height="235" alt="image" src="https://github.com/user-attachments/assets/cb15dca8-b79a-4523-868e-f2830bfcae1a" />
