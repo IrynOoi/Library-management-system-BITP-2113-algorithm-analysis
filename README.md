@@ -31,7 +31,7 @@
 •	Sorting method used
 
 
-<img width="481" height="490" alt="image" src="https://github.com/user-attachments/assets/da16b2cc-3322-484d-975f-92993adc6471" />
+<img width="481" height="490" alt="image" src="https://github.com/user-attachments/assets/da16b2cc-3322-484d-975f-92993adc6471"style="margin-bottom: 20px;" />
 
 
 <img width="519" height="149" alt="image" src="https://github.com/user-attachments/assets/1075071e-7865-4b2e-a3d0-dd794e0b1b1c" />
