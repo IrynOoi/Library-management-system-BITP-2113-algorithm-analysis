@@ -38,6 +38,27 @@ style="margin-bottom: 20px;" />
 
 <img width="519" height="149" alt="image" src="https://github.com/user-attachments/assets/1075071e-7865-4b2e-a3d0-dd794e0b1b1c" />
 
+## When user enter [2], the system will perform an efficient sort using a divide-and-conquer strategy which is Merge Sort from the file and display the 100 data. Then, it will show the results for: 
+
+When user enter [2], the system will perform an efficient sort using a divide-and-conquer strategy which is Merge Sort from the file and display the 100 data. Then, it will show the results for: 
+
+•	Start Time
+•	End Time
+•	Total numbers of swaps
+•	Duration time
+•	Sorting method used
+
+<img width="495" height="539" alt="image" src="https://github.com/user-attachments/assets/56a7f692-98d5-4118-b3d2-35a4c1bb6dce" style="margin-bottom: 20px;" />
+
+<img width="517" height="136" alt="image" src="https://github.com/user-attachments/assets/392b1c86-7a68-447c-b341-cb9a56bcc794" />
+
+
+## When user enter [3], the system will revert the data to its original unsorted state. Then, it will display the 100 data and show that the data has unsorted.
+
+<img width="504" height="529" alt="image" src="https://github.com/user-attachments/assets/d167d29e-f070-4a25-8b7e-f48b6e511105" style="margin-bottom: 20px;"/>
+
+<img width="517" height="38" alt="image" src="https://github.com/user-attachments/assets/aaea66b3-d361-40ab-aa17-215e924a3516" />
+
 
 
 
